@@ -1,0 +1,77 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator nexusPrisma {
+  provider = "nexus-prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Car {
+  id          String        @id @default(uuid())
+  name        String
+  brand       String
+  description String
+  image       String
+  price       Int
+  stock       Int
+  transaction Transaction[]
+  history     CarHistory[]
+}
+
+model Transaction {
+  id      String @id @default(uuid())
+  user_id String
+  user    User   @relation(fields: [user_id], references: [id])
+  car_id  String
+  car     Car    @relation(fields: [car_id], references: [id])
+  amount  Int
+}
+
+model History {
+  id      String       @id @default(uuid())
+  tanggal DateTime     @default(now())
+  total   Int
+  cars    CarHistory[]
+}
+
+model CarHistory {
+  id         String  @id @default(uuid())
+  id_history String
+  history    History @relation(fields: [id_history], references: [id])
+  id_car     String
+  car        Car     @relation(fields: [id_car], references: [id])
+  price      Int
+  amount     Int
+}
+
+// model Jual {
+//   id        String      @id @default(uuid())
+//   tanggal   DateTime    @default(now())
+//   total     Int
+//   penjualan Penjualan[]
+// }
+
+// model Penjualan {
+//   id        String @id @default(uuid())
+//   id_jual   String
+//   jual      Jual   @relation(fields: [id_jual], references: [id])
+//   id_barang String
+//   barang    Barang @relation(fields: [id_barang], references: [id])
+//   harga     Int
+//   jumlah    Int
+// }
+
+model User {
+  id          String        @id @default(uuid())
+  username    String        @unique
+  password    String
+  transaction Transaction[]
+}
