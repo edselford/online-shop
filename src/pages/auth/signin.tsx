@@ -1,12 +1,21 @@
 import { NextPage } from "next";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 
 const SignIn: NextPage = (_props) => {
   const router = useRouter();
   const [logInfo, setLogInfo] = useState({ username: "", password: "" });
   const [error, setError] = useState(false);
+
+  const darkToggle = (dark: boolean) => {
+    document.getElementById("container")?.classList.toggle("dark", dark);
+    localStorage.setItem("dark", dark ? "true" : "false");
+  };
+
+  useEffect(() => {
+    darkToggle(localStorage.getItem("dark") === "true");
+  }, []);
 
   const submitHandler = async (event:FormEvent) => {
     event.preventDefault();

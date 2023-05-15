@@ -43,6 +43,11 @@ export default function Home({ username, carsFetch }: { username: string; carsFe
         <h4 className="dark:text-slate-500 font-sans">Loading</h4>
       </div>
     );
+    
+
+  if (cars.data.car.length === 0) return <div className="h-[80vh] w-full grid place-items-center">
+    <h1 className="font-sans">There's no car for sale : (</h1>
+  </div>
 
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-10 items-center h-full w-full px-10">
@@ -123,7 +128,10 @@ export default function Home({ username, carsFetch }: { username: string; carsFe
                 </div>
               </div>
             );
-        })}
+        })
+
+        
+        }
     </div>
   );
 }

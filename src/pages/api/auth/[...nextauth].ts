@@ -11,6 +11,17 @@ export const authOptions: NextAuthOptions = {
     error: "/auth/signin",
   },
   secret: process.env.SECRET,
+  callbacks: {
+    async jwt({token, user}) {
+      return {...token, ...user}
+    },
+    async session({ session, token, user }) {
+      session.user.id = token.id as string;
+      session.user.name = token.name as string;
+      session.user.role = token.role as string;
+      return session;
+    }
+  },
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -36,7 +47,7 @@ export const authOptions: NextAuthOptions = {
           );
         }
 
-        return { id: user.id, name: user.username };
+        return { id: user.id, name: user.username, role: user.role };
       },
     }),
   ],
