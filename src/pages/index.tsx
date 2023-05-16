@@ -89,7 +89,7 @@ const Body = function ({
     );
 
   const [selectedId, setSelectedId] = useState<string | undefined>(undefined);
-  const [zfix, setzfix] = useState<string|null>(null)
+  const [zfix, setzfix] = useState<string | null>(null);
 
   return (
     <div>
@@ -102,7 +102,10 @@ const Body = function ({
                   key={car.id}
                   car={car}
                   addToCart={() => addToCart(car.id)}
-                  onClick={() => {setSelectedId(car.id); setzfix(car.id)}}
+                  onClick={() => {
+                    setSelectedId(car.id);
+                    setzfix(car.id);
+                  }}
                   isSelected={zfix == car.id}
                 />
               );
@@ -112,7 +115,9 @@ const Body = function ({
                   key={car.id}
                   car={car}
                   addToCart={() => addToCart(car.id)}
-                  onClick={() => {setSelectedId(car.id), setzfix(car.id)}}
+                  onClick={() => {
+                    setSelectedId(car.id), setzfix(car.id);
+                  }}
                   isSelected={zfix == car.id}
                 />
               );
@@ -127,18 +132,18 @@ const Body = function ({
           return (
             <motion.div className="absolute z-50 left-0 top-0 w-[100vw] h-[100vh] bg-opacity-50 bg-black">
               <motion.div
-                className="relative top-[10vh] left-[10vw] w-[80vw] h-[80vh] dark:bg-github-dark-bg2 border border-solid dark:border-github-dark-border rounded-lg overflow-hidden"
+                className="relative md:top-[10vh] md:left-[10vw] md:w-[80vw] md:h-[80vh] w-[100vw] h-[100vh] dark:bg-github-dark-bg2 bg-github-light-bg2 border border-solid dark:border-github-dark-border border-github-light-border md:rounded-2xl overflow-hidden"
                 layoutId={selectedId}
                 onClick={() => {}}
               >
-                <motion.div className="flex flex-row h-full w-full">
-                  <motion.div className="w-3/5">
+                <motion.div className="flex lg:flex-row flex-col h-full w-full">
+                  <motion.div className="lg:w-3/5 w-full">
                     <motion.img
                       src={car.image}
                       className="w-full h-[400px] object-cover rounded-br-lg"
                     />
                   </motion.div>
-                  <motion.div className="w-2/5 p-5">
+                  <motion.div className="lg:w-2/5 w-full p-5">
                     <motion.div
                       className="absolute right-4 top-4 rounded-lg dark:bg-github-dark-bg1 bg-github-light-bg2 cursor-pointer"
                       onClick={() => setSelectedId(undefined)}
@@ -155,6 +160,12 @@ const Body = function ({
                       </svg>
                     </motion.div>
                     <motion.h1 className="font-sans">{car.name}</motion.h1>
+                    <motion.h3 className="font-sans text-slate-400">
+                      {car.price.toLocaleString("en-US", {
+                        style: "currency",
+                        currency: "USD",
+                      })}
+                    </motion.h3>
                     <motion.p className="font-sans">{car.description}</motion.p>
                   </motion.div>
                 </motion.div>
