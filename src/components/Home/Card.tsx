@@ -1,16 +1,22 @@
 import { Car } from "@prisma/client";
+import { motion } from "framer-motion";
 
 export default function ({
   car,
   addToCart,
+  onClick,
+  isSelected
 }: {
   car: Car;
   addToCart: Function;
+  onClick: Function;
+  isSelected: boolean;
 }) {
   return (
-    <div
+    <motion.div
+      layoutId={car.id}
       key={car.id}
-      className="w-full h-[220px] shadow group m-0 rounded-xl overflow-hidden dark:bg-github-dark-bg2 border border-solid dark:border-github-dark-border border-github-light-border"
+      className={`w-full h-[220px] shadow group m-0 rounded-xl overflow-hidden dark:bg-github-dark-bg2 border border-solid dark:border-github-dark-border border-github-light-border ${isSelected && "z-50"}`}
     >
       <div className="h-4/6 overflow-hidden relative">
         <img src={car.image} className="w-full h-[130px] object-cover" />
@@ -33,7 +39,7 @@ export default function ({
           )}
         </button>
       </div>
-      <div className="px-3">
+      <div className="px-3 cursor-pointer" onClick={() => onClick()}>
         <h3 className="mb-0  font-sans">{car.name}</h3>
         <p className="text-slate-400 font-sans">
           {car.price.toLocaleString("en-US", {
@@ -42,6 +48,6 @@ export default function ({
           })}
         </p>
       </div>
-    </div>
+    </motion.div>
   );
 }

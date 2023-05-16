@@ -1,16 +1,22 @@
 import { Car } from "@prisma/client";
+import { motion } from "framer-motion";
 
 export default function ({
   car,
   addToCart,
+  onClick,
+  isSelected,
 }: {
   car: Car;
   addToCart: Function;
+  onClick: Function;
+  isSelected: boolean;
 }) {
   return (
-    <div
+    <motion.div
+      layoutId={car.id}
       key={car.id}
-      className="w-full h-[480px] shadow group m-0 col-span-2 row-span-2 rounded-xl overflow-hidden dark:bg-github-dark-bg2 border border-solid dark:border-github-dark-border border-github-light-border"
+      className={`w-full h-[480px] shadow group m-0 col-span-2 row-span-2 rounded-xl overflow-hidden dark:bg-github-dark-bg2 border border-solid dark:border-github-dark-border border-github-light-border ${isSelected && 'z-50'}`}
     >
       <div className="h-2/3 overflow-hidden relative">
         <img src={car.image} className="w-full h-[300px] object-cover" />
@@ -29,7 +35,7 @@ export default function ({
           </svg>
         </button>
       </div>
-      <div className="p-5">
+      <div className="p-5 cursor-pointer" onClick={() => onClick()}>
         <div className="flex flex-row justify-between">
           <h1 className="font-sans">{car.name}</h1>
           <h3 className="font-sans m-2 text-slate-400">
@@ -41,6 +47,6 @@ export default function ({
         </div>
         <p>{car.description}</p>
       </div>
-    </div>
+    </motion.div>
   );
 }
