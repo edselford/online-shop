@@ -45,25 +45,52 @@ export interface CartQuery {
 }
 
 export const ADD_CART = gql`
-mutation Mutation($carId: String!, $amount: Int!, $username: String!) {
-  addTransaction(car_id: $carId, amount: $amount, username: $username)
-}
+  mutation Mutation($carId: String!, $amount: Int!, $username: String!) {
+    addTransaction(car_id: $carId, amount: $amount, username: $username)
+  }
 `;
 
 export const DEL_CART = gql`
-mutation Mutation($deleteTransactionId: String!) {
-  deleteTransaction(id: $deleteTransactionId)
-}
-`
+  mutation Mutation($deleteTransactionId: String!) {
+    deleteTransaction(id: $deleteTransactionId)
+  }
+`;
 
 export const AMOUNT_TANSACTION = gql`
-mutation Mutation($amountTransactionId: String!, $amount: Int!, $isIncrement: Boolean!) {
-  amountTransaction(id: $amountTransactionId, amount: $amount, isIncrement: $isIncrement)
-}
+  mutation Mutation(
+    $amountTransactionId: String!
+    $amount: Int!
+    $isIncrement: Boolean!
+  ) {
+    amountTransaction(
+      id: $amountTransactionId
+      amount: $amount
+      isIncrement: $isIncrement
+    )
+  }
 `;
 
 export const SAVE_TO_HISTORY = gql`
-mutation Mutation($total: Int!, $tanggal: String!, $transactionIds: [String!]!) {
-  saveToHistory(total: $total, tanggal: $tanggal, transaction_ids: $transactionIds)
-}
-`
+  mutation Mutation(
+    $total: Int!
+    $tanggal: String!
+    $transactionIds: [String!]!
+  ) {
+    saveToHistory(
+      total: $total
+      tanggal: $tanggal
+      transaction_ids: $transactionIds
+    )
+  }
+`;
+
+export const CREATE_USER = gql`
+  mutation Mutation(
+    $name: String!
+    $password: String!
+    $email: String!
+    $phone: String!
+  ) {
+    createUser(name: $name, password: $password, email: $email, phone: $phone)
+  }
+`;

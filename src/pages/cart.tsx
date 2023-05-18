@@ -25,9 +25,12 @@ export default function ({ host }: { host: string | null }) {
   const session = useSession();
   const router = useRouter();
 
-  if (session.status === "loading") return <Container host={host}>
-    <h1>Loding ...</h1>
-  </Container>;
+  if (session.status === "loading")
+    return (
+      <Container host={host}>
+        <h1>Loding ...</h1>
+      </Container>
+    );
 
   if (session.status === "unauthenticated") {
     router.push(`/auth/signin?callbackUrl=http://${host}/cart`);
@@ -69,7 +72,7 @@ export default function ({ host }: { host: string | null }) {
   const [saveToHistory] = useMutation(SAVE_TO_HISTORY, {
     onCompleted() {
       refetch();
-      toast.success("Saved", {
+      toast.success("Checkout", {
         style: {
           border: "1px solid #30363D",
           padding: "20px",

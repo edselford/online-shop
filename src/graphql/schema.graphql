@@ -31,6 +31,7 @@ type Mutation {
   addCarHistory(amount: Int!, id_car: String!, id_history: String!, price: Int!): Boolean
   addTransaction(amount: Int!, car_id: String!, username: String!): Boolean
   amountTransaction(amount: Int!, id: String!, isIncrement: Boolean!): Boolean
+  createUser(email: String!, name: String!, password: String!, phone: String!): Boolean
   deleteTransaction(id: String!): Boolean
   saveToHistory(tanggal: String!, total: Int!, transaction_ids: [String!]!): Boolean
 }
@@ -39,6 +40,7 @@ type Query {
   car: [Car!]
   car_history(id_history: String!): [CarHistory!]
   transaction(username: String!): [Transaction!]
+  user: [User!]
 }
 
 type Transaction {
@@ -47,4 +49,11 @@ type Transaction {
   car_id: String!
   id: ID!
   user_id: String!
+}
+
+type User {
+  email: String!
+  id: ID!
+  phone: String!
+  username: String!
 }

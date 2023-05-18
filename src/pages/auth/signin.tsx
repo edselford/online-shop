@@ -17,7 +17,7 @@ const SignIn: NextPage = (_props) => {
     darkToggle(localStorage.getItem("dark") === "true");
   }, []);
 
-  const submitHandler = async (event:FormEvent) => {
+  const submitHandler = async (event: FormEvent) => {
     event.preventDefault();
     const res = await signIn("credentials", {
       username: logInfo.username,
@@ -27,16 +27,14 @@ const SignIn: NextPage = (_props) => {
 
     if (!res?.ok) {
       setError(true);
-      return
+      return;
     }
 
     if (router.query.callbackUrl) {
       router.push(new URL(router.query.callbackUrl as string));
     } else {
-      router.push("/")
+      router.push("/");
     }
-
-    
   };
 
   const changeHandler = (name: string, value: string) => {
@@ -64,7 +62,9 @@ const SignIn: NextPage = (_props) => {
                 type="text"
                 name="username"
                 required
-                onChange={(event) => changeHandler(event.target.name, event.target.value)}
+                onChange={(event) =>
+                  changeHandler(event.target.name, event.target.value)
+                }
                 className="font-sans w-full px-3 py-2 border border-github-light-border rounded-md focus:outline-none focus:border-indigo-300 dark:bg-github-dark-bg1 dark:text-white dark:placeholder-gray-500 dark:border-github-dark-border dark:focus:ring-gray-900 dark:focus:border-gray-500"
               />
             </div>
@@ -74,7 +74,9 @@ const SignIn: NextPage = (_props) => {
                 type="password"
                 name="password"
                 required
-                onChange={(event) => changeHandler(event.target.name, event.target.value)}
+                onChange={(event) =>
+                  changeHandler(event.target.name, event.target.value)
+                }
                 className="w-full px-3 py-2 border border-github-light-border rounded-md focus:outline-none focus:border-indigo-300 dark:bg-github-dark-bg1 dark:text-white dark:placeholder-gray-500 dark:border-github-dark-border dark:focus:ring-gray-900 dark:focus:border-gray-500"
               />
             </div>
@@ -85,6 +87,15 @@ const SignIn: NextPage = (_props) => {
               Log in
             </button>
           </form>
+          <p>
+            not have account?{" "}
+            <a
+              className="cursor-pointer"
+              onClick={() => router.push("/auth/register")}
+            >
+              register here
+            </a>
+          </p>
         </div>
       </div>
     </div>
