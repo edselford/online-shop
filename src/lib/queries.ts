@@ -94,3 +94,23 @@ export const CREATE_USER = gql`
     createUser(name: $name, password: $password, email: $email, phone: $phone)
   }
 `;
+
+export const CREATE_CAR = gql`
+  mutation Mutation(
+    $name: String!
+    $brand: String!
+    $desc: String!
+    $price: Int!
+    $stock: Int!
+    $image: String!
+  ) {
+    createCar(
+      name: $name
+      brand: $brand
+      desc: $desc
+      price: $price
+      stock: $stock
+      image: $image
+    )
+  }
+`;

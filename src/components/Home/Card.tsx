@@ -19,7 +19,7 @@ export default function ({
       className={`w-full h-[220px] shadow group m-0 rounded-xl overflow-hidden dark:bg-github-dark-bg2 border border-solid dark:border-github-dark-border border-github-light-border ${isSelected && "z-50"}`}
     >
       <div className="h-4/6 overflow-hidden relative">
-        <img src={car.image} className="w-full h-[130px] object-cover" />
+        <img src={`/images/${car.image}`} className="w-full h-[130px] object-cover" />
         <button
           onClick={() => car.stock != 0 && addToCart(car.id)}
           className="absolute top-3 right-3 dark:bg-github-dark-bg1 bg-white rounded-xl group-hover:opacity-100 opacity-0 transition duration-75 ease-in-out text-slate-400 hover:text-slate-600 dark:text-slate-600  dark:hover:text-slate-400"
