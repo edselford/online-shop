@@ -24,7 +24,12 @@ export default function ({ page, host }: { page: string; host: string }) {
     <>
       <div className="flex flex-row justify-between py-5 px-10">
         <div className="flex flex-row md:justify-between w-[100vw] dark:text-white">
-          <h1 onClick={() => router.push("/")} className="font-sans cursor-pointer pt-3 mr-2 md:mr-5">Zel Ford</h1>
+          <h1
+            onClick={() => router.push("/")}
+            className="font-sans cursor-pointer pt-3 mr-2 md:mr-5"
+          >
+            Zel Ford
+          </h1>
           <div className="w-[200px] flex justify-between items-center">
             <div
               onClick={() => darkToggle(!isDark)}
@@ -38,7 +43,12 @@ export default function ({ page, host }: { page: string; host: string }) {
                 transition={{ duration: 0.1 }}
               ></motion.div>
             </div>
-            <button onClick={() => router.push("/cart", undefined, {shallow: false})} className="m-1 dark:hover:bg-github-dark-bg2 hover:bg-github-light-bg2 rounded-lg h-2/3 w-[50px] flex justify-center items-center">
+            <button
+              onClick={() =>
+                router.push("/cart", undefined, { shallow: false })
+              }
+              className="m-1 dark:hover:bg-github-dark-bg2 hover:bg-github-light-bg2 rounded-lg h-2/3 w-[50px] flex justify-center items-center"
+            >
               {cartSVG}
             </button>
             <button
@@ -55,9 +65,23 @@ export default function ({ page, host }: { page: string; host: string }) {
           {session.status === "authenticated" ? (
             <div>
               Logged as {session.data.user?.name} <br />
+              {session.data.user.role === "ADMIN" && (
+                <>
+                  <button
+                    onClick={() => {
+                      router.push(`http://${host}/admin/car`);
+                    }}
+                    className="dark:text-blue-400 text-blue-800"
+                  >
+                    {" "}
+                    Admin dashboard
+                  </button>
+                  <br />
+                </>
+              )}
               <button
-                onClick={ () => {
-                   signOut({
+                onClick={() => {
+                  signOut({
                     redirect: false,
                   });
                   router.push(`http://${host}/`);

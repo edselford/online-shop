@@ -76,8 +76,8 @@ const Body = function ({
 
   if (cars.loading)
     return (
-      <div className="w-[80vw] h-[200px] mx-5 grid place-items-center dark:bg-github-dark-bg2 bg-github-light-bg2 rounded-xl border dark:border-github-dark-border border-github-light-border">
-        <h4 className="dark:text-slate-500 font-sans">Loading</h4>
+      <div className="h-[80vh] w-full grid place-items-center">
+        <h1 className="font-sans">Loading</h1>
       </div>
     );
 
@@ -139,7 +139,7 @@ const Body = function ({
                 <motion.div className="flex lg:flex-row flex-col h-full w-full">
                   <motion.div className="lg:w-3/5 w-full">
                     <motion.img
-                      src={car.image}
+                      src={`/images/${car.image}`}
                       className="w-full h-[400px] object-cover rounded-br-lg"
                     />
                   </motion.div>

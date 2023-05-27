@@ -1,5 +1,5 @@
 import { Context } from "@/graphql/context";
-import { list, nonNull, objectType, queryField, stringArg } from "nexus";
+import { intArg, list, mutationField, nonNull, objectType, queryField, stringArg } from "nexus";
 import { Car as car } from "nexus-prisma";
 
 export const Car = objectType({
@@ -25,4 +25,30 @@ export const carQuery = queryField("car", {
       }
     })
   }
+})
+
+export const createCar = mutationField("createCar", {
+  type: "Boolean",
+  args: {
+    name: nonNull(stringArg()),
+    brand: nonNull(stringArg()),
+    desc: nonNull(stringArg()),
+    price: nonNull(intArg()),
+    stock: nonNull(intArg()),
+    image: nonNull(stringArg())
+  }, 
+  async resolve(_, args, ctx:Context) {
+    await ctx.prisma.car.create({
+      data: {
+        name: args.name,
+        brand: args.brand,
+        description: args.desc,
+        price: args.price,
+        stock: args.stock,
+        image: args.image
+      }
+    })
+    return true;
+  }
+
 })
