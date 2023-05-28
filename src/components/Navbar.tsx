@@ -69,7 +69,7 @@ export default function ({ page, host }: { page: string; host: string }) {
                 <>
                   <button
                     onClick={() => {
-                      router.push(`http://${host}/admin/car`);
+                      router.push(`http://${host}/admin/dashboard`);
                     }}
                     className="dark:text-blue-400 text-blue-800"
                   >

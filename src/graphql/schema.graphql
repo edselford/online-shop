@@ -13,35 +13,47 @@ type Car {
   transaction: [Transaction!]!
 }
 
-type CarHistory {
+type CarCheckout {
   amount: Int!
   car: Car!
   id: ID!
   id_car: String!
-  id_history: String!
+  id_checkout: String!
   price: Int!
 }
 
-type History {
+type Checkout {
+  alamat: String!
   id: ID!
+  kodepos: String!
+  kota: String!
+  provinsi: String!
+  status: StatusEnum
   total: Int!
+  user: User!
 }
 
 type Mutation {
-  addCarHistory(amount: Int!, id_car: String!, id_history: String!, price: Int!): Boolean
+  addCarCheckout(amount: Int!, id_car: String!, id_checkout: String!, price: Int!): Boolean
+  addToCheckout(alamat: String!, kodepos: String!, kota: String!, provinsi: String!, tanggal: String!, total: Int!, transaction_ids: [String!]!, user_id: String!): Boolean
   addTransaction(amount: Int!, car_id: String!, username: String!): Boolean
   amountTransaction(amount: Int!, id: String!, isIncrement: Boolean!): Boolean
   createCar(brand: String!, desc: String!, image: String!, name: String!, price: Int!, stock: Int!): Boolean
   createUser(email: String!, name: String!, password: String!, phone: String!): Boolean
   deleteTransaction(id: String!): Boolean
-  saveToHistory(tanggal: String!, total: Int!, transaction_ids: [String!]!): Boolean
 }
 
 type Query {
   car: [Car!]
-  car_history(id_history: String!): [CarHistory!]
+  car_checkout(id_checkout: String!): [CarCheckout!]
   transaction(username: String!): [Transaction!]
   user: [User!]
+}
+
+enum StatusEnum {
+  APPROVED
+  PENDING
+  REJECTED
 }
 
 type Transaction {

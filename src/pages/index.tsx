@@ -43,7 +43,7 @@ export default function ({ host }: { host: string | null }) {
     },
   });
 
-  const addToCart = (carId: string) => {
+  const addToCart = (carId: string, amount: number = 1) => {
     if (session.status === "unauthenticated" || session.data == null) {
       router.push(`/auth/signin?callbackUrl=http://${host}/`);
       return;
@@ -53,7 +53,7 @@ export default function ({ host }: { host: string | null }) {
       variables: {
         username: session.data.user?.name,
         carId,
-        amount: 1,
+        amount,
       },
     });
   };
@@ -90,9 +90,10 @@ const Body = function ({
 
   const [selectedId, setSelectedId] = useState<string | undefined>(undefined);
   const [zfix, setzfix] = useState<string | null>(null);
+  const [amount, setAmount] = useState<number>(0);
 
   return (
-    <div>
+    <div className="h-full">
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-10 items-center h-full w-full px-10">
         {cars.data &&
           cars.data.car.map((car: Car, i: number) => {
@@ -105,6 +106,10 @@ const Body = function ({
                   onClick={() => {
                     setSelectedId(car.id);
                     setzfix(car.id);
+                    window.scrollTo({
+                      top: 0,
+                      behavior: "smooth"
+                    })
                   }}
                   isSelected={zfix == car.id}
                 />
@@ -117,6 +122,10 @@ const Body = function ({
                   addToCart={() => addToCart(car.id)}
                   onClick={() => {
                     setSelectedId(car.id), setzfix(car.id);
+                    window.scrollTo({
+                      top: 0,
+                      behavior: "smooth"
+                    })
                   }}
                   isSelected={zfix == car.id}
                 />
@@ -125,14 +134,18 @@ const Body = function ({
       </div>
       <AnimatePresence>
         {(() => {
-          if (!selectedId) return <></>;
+          if (!selectedId) {
+            document.body.style.overflow = "scroll"
+            return <></>
+          };
           const car = cars.data.car.filter(
             (car: Car) => car.id === selectedId
           )[0] as Car;
+          document.body.style.overflow = "hidden";
           return (
-            <motion.div className="absolute z-50 left-0 top-0 w-[100vw] h-[100vh] bg-opacity-50 bg-black">
+            <motion.div className="absolute z-50 left-0 top-0 w-[100vw] h-[100%] bg-opacity-50 bg-black">
               <motion.div
-                className="relative md:top-[10vh] md:left-[10vw] md:w-[80vw] md:h-[80vh] w-[100vw] h-[100vh] dark:bg-github-dark-bg2 bg-github-light-bg2 border border-solid dark:border-github-dark-border border-github-light-border md:rounded-2xl overflow-hidden"
+                className="relative md:top-[5vh] md:left-[10vw] md:w-[80vw] md:h-[90vh] w-[100vw] h-[100vh] overflow-scroll dark:bg-github-dark-bg2 bg-github-light-bg2 border border-solid dark:border-github-dark-border border-github-light-border md:rounded-2xl"
                 layoutId={selectedId}
                 onClick={() => {}}
               >
@@ -167,6 +180,28 @@ const Body = function ({
                       })}
                     </motion.h3>
                     <motion.p className="font-sans">{car.description}</motion.p>
+                    <motion.p className="font-sans text-slate-400">Stock : {car.stock}</motion.p>
+                    <div className="!pt-5">
+                      <p className="font-sans !pl-1">Amount</p>
+                      <input
+                        type="number"
+                        name="amount"
+                        disabled={car.stock == 0}
+                        required
+                        value={amount}
+                        onChange={({ target }) =>
+                          setAmount(parseInt(target.value))
+                        }
+                        className="w-full !px-3 !py-2 border border-github-light-border rounded-md focus:outline-none focus:border-indigo-300 dark:bg-github-dark-bg1 dark:text-white dark:placeholder-gray-500 dark:border-github-dark-border dark:focus:ring-gray-900 dark:focus:border-gray-500"
+                      />
+                    </div>
+                    <motion.button
+                      disabled={car.stock == 0}
+                      onClick={() => addToCart(car.id, amount)}
+                      className="dark:bg-github-dark-bg3 disabled:bg-github-dark-bg1 dark:border-none bg-white border border-github-light-border w-full p-3 rounded-lg mt-5"
+                    >
+                      {car.stock == 0 ? "Out of Stock" : "Add to Cart"}
+                    </motion.button>
                   </motion.div>
                 </motion.div>
               </motion.div>

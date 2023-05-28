@@ -23,9 +23,10 @@ model Car {
   price       Int
   stock       Int
   transaction Transaction[]
-  history     CarHistory[]
+  history     CarCheckout[]
 }
 
+// Setiap car di dalam keranjang
 model Transaction {
   id      String @id @default(uuid())
   user_id String
@@ -35,21 +36,36 @@ model Transaction {
   amount  Int
 }
 
-model History {
-  id      String       @id @default(uuid())
-  tanggal DateTime     @default(now())
-  total   Int
-  cars    CarHistory[]
+enum Status {
+  APPROVED
+  REJECTED
+  PENDING
 }
 
-model CarHistory {
-  id         String  @id @default(uuid())
-  id_history String
-  history    History @relation(fields: [id_history], references: [id])
-  id_car     String
-  car        Car     @relation(fields: [id_car], references: [id])
-  price      Int
-  amount     Int
+// CHECKOUT
+model Checkout {
+  id       String        @id @default(uuid())
+  tanggal  DateTime      @default(now())
+  user_id  String
+  user     User          @relation(fields: [user_id], references: [id])
+  total    Int
+  status   Status
+  provinsi String
+  kota     String
+  alamat   String
+  kodepos  String
+  cars     CarCheckout[]
+}
+
+// CAR CHECKOUT
+model CarCheckout {
+  id          String   @id @default(uuid())
+  id_checkout String
+  checkout    Checkout @relation(fields: [id_checkout], references: [id])
+  id_car      String
+  car         Car      @relation(fields: [id_car], references: [id])
+  price       Int
+  amount      Int
 }
 
 // model Jual {
@@ -77,6 +93,7 @@ model User {
   phone       String
   role        Role          @default(USER)
   transaction Transaction[]
+  Checkout    Checkout[]
 }
 
 enum Role {

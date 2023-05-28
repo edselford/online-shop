@@ -70,15 +70,25 @@ export const AMOUNT_TANSACTION = gql`
   }
 `;
 
-export const SAVE_TO_HISTORY = gql`
+export const ADD_TO_CHECKOUT = gql`
   mutation Mutation(
     $total: Int!
     $tanggal: String!
+    $provinsi: String!
+    $kota: String!
+    $alamat: String!
+    $kodepos: String!
+    $userId: String!
     $transactionIds: [String!]!
   ) {
-    saveToHistory(
+    addToCheckout(
       total: $total
       tanggal: $tanggal
+      provinsi: $provinsi
+      kota: $kota
+      alamat: $alamat
+      kodepos: $kodepos
+      user_id: $userId
       transaction_ids: $transactionIds
     )
   }

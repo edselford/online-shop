@@ -5,14 +5,14 @@ import {
   CartQuery,
   CART_QUERY,
   DEL_CART,
-  SAVE_TO_HISTORY,
+  ADD_TO_CHECKOUT,
 } from "@/lib/queries";
 import { QueryResult, useMutation, useQuery } from "@apollo/client";
 import dayjs from "dayjs";
 import { GetServerSideProps } from "next";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
 
 export const getServerSideProps: GetServerSideProps<{
@@ -45,6 +45,13 @@ export default function ({ host }: { host: string | null }) {
     refetch();
   }, []);
 
+  const [checkInfo, setCheckInfo] = useState({
+    provinsi: "",
+    kota: "",
+    alamat: "",
+    kodepos: "",
+  });
+
   const [amountTransaction] = useMutation(AMOUNT_TANSACTION, {
     onCompleted() {
       refetch();
@@ -69,7 +76,7 @@ export default function ({ host }: { host: string | null }) {
     },
   });
 
-  const [saveToHistory] = useMutation(SAVE_TO_HISTORY, {
+  const [addToCheckout] = useMutation(ADD_TO_CHECKOUT, {
     onCompleted() {
       refetch();
       toast.success("Checkout", {
@@ -84,6 +91,12 @@ export default function ({ host }: { host: string | null }) {
           secondary: "#F6F8FA",
         },
       });
+      setCheckInfo({
+        provinsi: "",
+        kota: "",
+        alamat: "",
+        kodepos: "",
+      });
     },
   });
 
@@ -97,10 +110,64 @@ export default function ({ host }: { host: string | null }) {
     });
   }
 
+  function changeHandler(event: ChangeEvent<HTMLInputElement>) {
+    const name = event.target.name;
+    const value = event.target.value;
+
+    switch (name) {
+      case "provinsi":
+        setCheckInfo({ ...checkInfo, provinsi: value });
+        break;
+      case "kota":
+        setCheckInfo({ ...checkInfo, kota: value });
+        break;
+      case "alamat":
+        setCheckInfo({ ...checkInfo, alamat: value });
+        break;
+      case "kodepos":
+        setCheckInfo({ ...checkInfo, kodepos: value });
+        break;
+    }
+  }
+
+  function submitHandler(event: FormEvent) {
+    event.preventDefault();
+    if (!loading && data.transaction.length == 0) {
+      toast.error("cart is empty", {
+        style: {
+          border: "1px solid #30363D",
+          padding: "20px",
+          color: "white",
+          background: "#161B22",
+        },
+      });
+      return;
+    }
+
+    addToCheckout({
+      variables: {
+        total: data.transaction.reduce(
+          (a: number, b: CartQuery) => a + b.amount * b.car.price,
+          0
+        ),
+        tanggal: dayjs().toString(),
+        provinsi: checkInfo.provinsi,
+        kota: checkInfo.kota,
+        alamat: checkInfo.alamat,
+        kodepos: checkInfo.kodepos,
+        userId: session.data?.user.id,
+        transactionIds: data.transaction.map((cart: CartQuery) => cart.id),
+      },
+    });
+
+
+
+  }
+
   return (
     <Container host={host}>
       <div className="w-full h-min grid grid-cols-1 lg:grid-cols-4 gap-10 px-10">
-        <div className="bg-github-light-bg2 dark:bg-github-dark-bg2 h-max p-5 rounded-xl lg:order-last border border-github-light-border dark:border-github-dark-border">
+        <div className="mb-5 bg-github-light-bg2 dark:bg-github-dark-bg2 h-max p-5 rounded-xl order-last border border-github-light-border dark:border-github-dark-border">
           <h3 className="text-slate-600 my-0">Total</h3>
           <h1 className="my-0">
             {!loading &&
@@ -114,37 +181,58 @@ export default function ({ host }: { host: string | null }) {
                   currency: "USD",
                 })}
           </h1>
-          <button
-            onClick={() => {
-              if (!loading && data.transaction.length == 0) {
-                toast.error("cart is empty", {
-                  style: {
-                    border: "1px solid #30363D",
-                    padding: "20px",
-                    color: "white",
-                    background: "#161B22",
-                  },
-                });
-                return;
-              }
-
-              saveToHistory({
-                variables: {
-                  total: data.transaction.reduce(
-                    (a: number, b: CartQuery) => a + b.amount * b.car.price,
-                    0
-                  ),
-                  tanggal: dayjs().toString(),
-                  transactionIds: data.transaction.map(
-                    (cart: CartQuery) => cart.id
-                  ),
-                },
-              });
-            }}
-            className="dark:bg-github-dark-bg3 dark:border-none bg-white border border-github-light-border w-full p-3 rounded-lg mt-5"
-          >
-            Checkout
-          </button>
+          <form onSubmit={submitHandler}>
+            <div className="!pt-5">
+              <p className="font-sans !pl-1">Provinsi</p>
+              <input
+                type="text"
+                name="provinsi"
+                required
+                onChange={changeHandler}
+                value={checkInfo.provinsi}
+                className="w-full !px-3 !py-2 border border-github-light-border rounded-md focus:outline-none focus:border-indigo-300 dark:bg-github-dark-bg1 dark:text-white dark:placeholder-gray-500 dark:border-github-dark-border dark:focus:ring-gray-900 dark:focus:border-gray-500"
+              />
+            </div>
+            <div className="!pt-5">
+              <p className="font-sans !pl-1">Kota</p>
+              <input
+                type="text"
+                name="kota"
+                required
+                onChange={changeHandler}
+                value={checkInfo.kota}
+                className="w-full !px-3 !py-2 border border-github-light-border rounded-md focus:outline-none focus:border-indigo-300 dark:bg-github-dark-bg1 dark:text-white dark:placeholder-gray-500 dark:border-github-dark-border dark:focus:ring-gray-900 dark:focus:border-gray-500"
+              />
+            </div>
+            <div className="!pt-5">
+              <p className="font-sans !pl-1">Alamat</p>
+              <input
+                type="text"
+                name="alamat"
+                required
+                onChange={changeHandler}
+                value={checkInfo.alamat}
+                className="w-full !px-3 !py-2 border border-github-light-border rounded-md focus:outline-none focus:border-indigo-300 dark:bg-github-dark-bg1 dark:text-white dark:placeholder-gray-500 dark:border-github-dark-border dark:focus:ring-gray-900 dark:focus:border-gray-500"
+              />
+            </div>
+            <div className="!pt-5">
+              <p className="font-sans !pl-1">Kodepos</p>
+              <input
+                type="text"
+                name="kodepos"
+                required
+                onChange={changeHandler}
+                value={checkInfo.kodepos}
+                className="w-full !px-3 !py-2 border border-github-light-border rounded-md focus:outline-none focus:border-indigo-300 dark:bg-github-dark-bg1 dark:text-white dark:placeholder-gray-500 dark:border-github-dark-border dark:focus:ring-gray-900 dark:focus:border-gray-500"
+              />
+            </div>
+            <button
+              type="submit"
+              className="dark:bg-github-dark-bg3 dark:border-none bg-white border border-github-light-border w-full p-3 rounded-lg mt-5"
+            >
+              Checkout
+            </button>
+          </form>
         </div>
         <div className="dark:bg-github-dark-bg2 bg-github-light-bg2 border border-github-light-border dark:border-github-dark-border h-max lg:col-span-3 p-5 rounded-xl flex flex-col items-center">
           {!loading && data.transaction.length != 0 ? (
@@ -152,7 +240,7 @@ export default function ({ host }: { host: string | null }) {
               <div key={trs.id} className="w-full">
                 <div className="grid grid-cols-6 place-items-center w-full">
                   <img
-                    src={trs.car.image}
+                    src={`images/${trs.car.image}`}
                     className="w-[100px] h-[70px] object-cover rounded-xl"
                   />
                   <div className="ml-4 place-self-center w-full">

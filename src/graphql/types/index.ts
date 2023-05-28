@@ -1,5 +1,5 @@
 export * from "./Car";
 export * from "./Transaction";
-export * from "./CarHistory";
-export * from "./History";
+export * from "./CarCheckout";
+export * from "./Checkout";
 export * from "./User";
