@@ -145,7 +145,7 @@ const Body = function ({
           return (
             <motion.div className="absolute z-50 left-0 top-0 w-[100vw] h-[100%] bg-opacity-50 bg-black">
               <motion.div
-                className="relative md:top-[5vh] md:left-[10vw] md:w-[80vw] md:h-[90vh] w-[100vw] h-[100vh] overflow-scroll dark:bg-github-dark-bg2 bg-github-light-bg2 border border-solid dark:border-github-dark-border border-github-light-border md:rounded-2xl"
+                className="md:p-5 relative md:top-[5vh] md:left-[10vw] md:w-[80vw] md:h-[90vh] lg:h-[60vh] lg:top-[20vh] w-[100vw] h-[100vh] overflow-scroll dark:bg-github-dark-bg2 bg-github-light-bg2 border border-solid dark:border-github-dark-border border-github-light-border md:rounded-2xl"
                 layoutId={selectedId}
                 onClick={() => {}}
               >
@@ -153,7 +153,7 @@ const Body = function ({
                   <motion.div className="lg:w-3/5 w-full">
                     <motion.img
                       src={`/images/${car.image}`}
-                      className="w-full h-[400px] object-cover rounded-br-lg"
+                      className="w-full h-[400px] object-cover md:rounded-lg"
                     />
                   </motion.div>
                   <motion.div className="lg:w-2/5 w-full p-5">

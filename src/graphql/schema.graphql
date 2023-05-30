@@ -40,7 +40,9 @@ type Mutation {
   amountTransaction(amount: Int!, id: String!, isIncrement: Boolean!): Boolean
   createCar(brand: String!, desc: String!, image: String!, name: String!, price: Int!, stock: Int!): Boolean
   createUser(email: String!, name: String!, password: String!, phone: String!): Boolean
+  deleteCar(id: String!): Boolean
   deleteTransaction(id: String!): Boolean
+  editCar(brand: String!, desc: String!, id: String!, image: String!, name: String!, price: Int!, stock: Int!): Boolean
 }
 
 type Query {

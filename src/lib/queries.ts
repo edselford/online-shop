@@ -124,3 +124,31 @@ export const CREATE_CAR = gql`
     )
   }
 `;
+
+export const DELETE_CAR = gql`
+  mutation Mutation($id: String!) {
+    deleteCar(id: $id)
+  }
+`;
+
+export const EDIT_CAR = gql`
+  mutation EditCar(
+    $id: String!
+    $name: String!
+    $brand: String!
+    $desc: String!
+    $price: Int!
+    $stock: Int!
+    $image: String!
+  ) {
+    editCar(
+      id: $id
+      name: $name
+      brand: $brand
+      desc: $desc
+      price: $price
+      stock: $stock
+      image: $image
+    )
+  }
+`;

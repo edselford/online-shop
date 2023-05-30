@@ -50,5 +50,48 @@ export const createCar = mutationField("createCar", {
     })
     return true;
   }
+})
 
+
+export const deleteCar = mutationField("deleteCar", {
+  type: "Boolean",
+  args: {
+    id: nonNull(stringArg())
+  },
+  async resolve(_, args, ctx:Context) {
+    await ctx.prisma.car.delete({
+      where: {
+        id: args.id
+      }
+    })
+  }
+})
+
+
+export const editCar = mutationField("editCar", {
+  type: "Boolean",
+  args: {
+    id: nonNull(stringArg()),
+    name: nonNull(stringArg()),
+    brand: nonNull(stringArg()),
+    desc: nonNull(stringArg()),
+    price: nonNull(intArg()),
+    stock: nonNull(intArg()),
+    image: nonNull(stringArg())
+  },
+  async resolve(_, args, ctx: Context) {
+    await ctx.prisma.car.update({
+      data: {
+        name: args.name,
+        brand: args.brand,
+        description: args.desc,
+        price: args.price,
+        stock: args.stock,
+        image: args.image
+      },
+      where: {
+        id: args.id
+      }
+    })
+  }
 })
