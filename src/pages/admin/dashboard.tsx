@@ -1,8 +1,6 @@
 import { GetServerSideProps } from "next";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { FormEvent, ChangeEvent, useState } from "react";
-import axios from "axios";
 import Navbar from "@/components/Admin/Navbar";
 import "bootstrap/dist/css/bootstrap.min.css";
 import prisma from "@/lib/prisma";
@@ -27,26 +25,26 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
 };
 
 export default function ({ host, car_count, check_count }: Props) {
-  const session = useSession();
+  const session = useSession({
+    required: true,
+    onUnauthenticated() {
+      router.push(`/auth/signin?callbackUrl=http://${host}/admin/dashboard`);
+    }
+  });
   const router = useRouter();
 
   if (session.status == "loading") {
     return "loading data..";
   }
 
-  if (session.status == "unauthenticated") {
-    router.push(`/auth/signin?callbackUrl=http://${host}/admin/dashboard`);
-    return;
-  }
-
-  if (session.data?.user.role == "USER") {
+  if (session.data.user.role == "USER") {
     router.push("/");
     return;
   }
 
   return (
     <>
-      <Navbar username={session.data?.user.name} />
+      <Navbar username={session.data.user.name} />
       <Container>
         <Row>
           <Col md={4} className="bg-[#dfdfdf] pb-[60px] px-[20px] pt-[10px] m-3">

@@ -1,3 +1,4 @@
+import { signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 import { MouseEventHandler } from "react";
 import { Navbar, Container, Nav, NavDropdown } from "react-bootstrap";
@@ -19,7 +20,7 @@ export default function({username}: {username: string|undefined}) {
                 <NavDropdown.Item href="produk" onClick={goTo}>
                  Master Produk 
                 </NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.3">
+                <NavDropdown.Item href="customer" onClick={goTo}>
                  Master Customer 
                 </NavDropdown.Item>
               </NavDropdown>
@@ -27,7 +28,13 @@ export default function({username}: {username: string|undefined}) {
             </Nav>
             <Nav>
               <NavDropdown title={username}>
-                <NavDropdown.Item>Logout</NavDropdown.Item>
+                <NavDropdown.Item onClick={() => {
+                  signOut({
+                    redirect: true
+                  })
+                  
+
+                }}>Logout</NavDropdown.Item>
               </NavDropdown>
             </Nav>
         </Container>

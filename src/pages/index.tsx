@@ -5,7 +5,7 @@ import { ADD_CART, CAR_QUERY } from "@/lib/queries";
 import { Car } from "@prisma/client";
 import BigCard from "@/components/Home/BigCard";
 import Card from "@/components/Home/Card";
-import { useSession } from "next-auth/react";
+import { useSession, signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import Container from "@/components/Container";
 import { motion, AnimatePresence } from "framer-motion";
@@ -44,10 +44,10 @@ export default function ({ host }: { host: string | null }) {
   });
 
   const addToCart = (carId: string, amount: number = 1) => {
-    if (session.status === "unauthenticated" || session.data == null) {
-      router.push(`/auth/signin?callbackUrl=http://${host}/`);
-      return;
-    }
+    if (session.data == null) {
+      signIn()
+      return
+    };
 
     addCart({
       variables: {
@@ -80,6 +80,13 @@ const Body = function ({
         <h1 className="font-sans">Loading</h1>
       </div>
     );
+
+  if (cars.error)
+  return (
+    <div className="h-[80vh] w-full grid place-items-center">
+      <h1 className="font-sans">Something went wrong</h1>
+    </div>
+  );
 
   if (cars.data.car.length === 0)
     return (

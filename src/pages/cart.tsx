@@ -22,28 +22,19 @@ export const getServerSideProps: GetServerSideProps<{
 });
 
 export default function ({ host }: { host: string | null }) {
-  const session = useSession();
+  const session = useSession({
+    required: true,
+    onUnauthenticated() {
+      router.push(`/auth/signin?callbackUrl=http://${host}/cart`);
+    }
+  });
   const router = useRouter();
 
-  if (session.status === "loading")
-    return (
-      <Container host={host}>
-        <h1>Loding ...</h1>
-      </Container>
-    );
-
-  if (session.status === "unauthenticated") {
-    router.push(`/auth/signin?callbackUrl=http://${host}/cart`);
-    return;
-  }
-
   const { refetch, loading, data } = useQuery(CART_QUERY, {
-    variables: { username: session.data?.user?.name || "" },
+    variables: { id: session.data?.user.id },
   });
 
-  useEffect(() => {
-    refetch();
-  }, []);
+  console.log(session.data?.user.id)
 
   const [checkInfo, setCheckInfo] = useState({
     provinsi: "",
@@ -99,6 +90,22 @@ export default function ({ host }: { host: string | null }) {
       });
     },
   });
+
+  if (session.status === "loading")
+    return (
+      <Container host={host}>
+        <h1>Loding ...</h1>
+      </Container>
+    );
+
+  
+
+
+  useEffect(() => {
+    refetch();
+  }, []);
+
+  
 
   function amountHandler(id: string, amount: number, increment: boolean) {
     amountTransaction({

@@ -42,13 +42,15 @@ type Mutation {
   createUser(email: String!, name: String!, password: String!, phone: String!): Boolean
   deleteCar(id: String!): Boolean
   deleteTransaction(id: String!): Boolean
+  deleteUser(id: String!): Boolean
   editCar(brand: String!, desc: String!, id: String!, image: String!, name: String!, price: Int!, stock: Int!): Boolean
 }
 
 type Query {
   car: [Car!]
+  carById(id: String!): Car
   car_checkout(id_checkout: String!): [CarCheckout!]
-  transaction(username: String!): [Transaction!]
+  transaction(id: String!): [Transaction!]
   user: [User!]
 }
 

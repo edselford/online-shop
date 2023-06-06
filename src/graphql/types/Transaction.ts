@@ -26,14 +26,12 @@ export const Transaction = objectType({
 export const queryTransaction = queryField("transaction", {
   type: list(nonNull(Transaction)),
   args: {
-    username: nonNull(stringArg()),
+    id: nonNull(stringArg()),
   },
   async resolve(_, args, ctx: Context) {
     return await ctx.prisma.transaction.findMany({
       where: {
-        user: {
-          username: args.username,
-        },
+        user_id: args.id
       },
     });
   },

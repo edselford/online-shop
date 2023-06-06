@@ -47,3 +47,39 @@ export const createUser = mutationField("createUser", {
     return true;
   },
 });
+
+export const deleteUser = mutationField("deleteUser", {
+  type: "Boolean",
+  args: {
+    id: nonNull(stringArg()),
+  },
+  async resolve(_, args, ctx: Context) {
+    await ctx.prisma.transaction.deleteMany({
+      where: {
+        user_id: args.id,
+      },
+    });
+    
+    await ctx.prisma.carCheckout.deleteMany({
+      where: {
+        checkout: {
+          user_id: args.id
+        }
+      }
+    })
+
+    await ctx.prisma.checkout.deleteMany({
+      where: {
+        user_id: args.id
+      }
+    })
+
+    await ctx.prisma.user.delete({
+      where: {
+        id: args.id,
+      },
+    });
+
+    return true;
+  },
+});

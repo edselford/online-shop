@@ -18,10 +18,24 @@ export const Car = objectType({
 
 export const carQuery = queryField("car", {
   type: list(nonNull(Car)),
-  async resolve(_, __, ctx: Context) {
+  async resolve(_, _args, ctx: Context) {
     return await ctx.prisma.car.findMany({
       orderBy: {
         name: "asc"
+      }
+    })
+  }
+})
+
+export const findCar = queryField("carById", {
+  type: Car,
+  args: {
+    id: nonNull(stringArg())
+  },
+  async resolve(_, args, ctx: Context) {
+    return await ctx.prisma.car.findFirst({
+      where: {
+        id: args.id
       }
     })
   }
@@ -64,6 +78,7 @@ export const deleteCar = mutationField("deleteCar", {
         id: args.id
       }
     })
+    return true;
   }
 })
 
@@ -93,5 +108,7 @@ export const editCar = mutationField("editCar", {
         id: args.id
       }
     })
+
+    return true;
   }
 })

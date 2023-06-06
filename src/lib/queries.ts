@@ -15,8 +15,8 @@ export const CAR_QUERY = gql`
 `;
 
 export const CART_QUERY = gql`
-  query Transaction($username: String!) {
-    transaction(username: $username) {
+  query Transaction($id: String!) {
+    transaction(id: $id) {
       id
       user_id
       amount
@@ -94,6 +94,17 @@ export const ADD_TO_CHECKOUT = gql`
   }
 `;
 
+export const USER_QUERY = gql`
+query Query {
+  user {
+    id
+    username
+    email
+    phone
+  }
+}
+`
+
 export const CREATE_USER = gql`
   mutation Mutation(
     $name: String!
@@ -102,6 +113,26 @@ export const CREATE_USER = gql`
     $phone: String!
   ) {
     createUser(name: $name, password: $password, email: $email, phone: $phone)
+  }
+`;
+
+export const DELETE_USER = gql`
+mutation Mutation($id: String!) {
+  deleteUser(id: $id)
+}
+`
+
+export const FIND_CAR = gql`
+  query CarById($id: String!) {
+    carById(id: $id) {
+      id
+      name
+      brand
+      description
+      image
+      price
+      stock
+    }
   }
 `;
 
@@ -132,7 +163,7 @@ export const DELETE_CAR = gql`
 `;
 
 export const EDIT_CAR = gql`
-  mutation EditCar(
+  mutation Mutation(
     $id: String!
     $name: String!
     $brand: String!
